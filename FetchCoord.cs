@@ -15,7 +15,8 @@ namespace Coordinates
         public static string FetchCoordinates()
         { 
             var conn = DatabaseConnection.Connection();
-            var myJsonString = File.ReadAllText("Coordinates2.json");
+            var filePath = @"C:\PProjects\Coordinates\Utilities\coord.json";
+            var myJsonString = File.ReadAllText(filePath);
             var myJObject = JObject.Parse(myJsonString).ToString();
             var obj = JsonConvert.DeserializeObject<Rootobject>(myJObject);
 
@@ -30,19 +31,13 @@ namespace Coordinates
                     {
                         foreach (var c in b)
                         {
-
-                            SqlCommand insertCommand = new SqlCommand("INSERT INTO KadunaBoundaries (Longitude, Latitude, LGA) VALUES (@0, @1, @2)", conn);
-
-
+                            SqlCommand insertCommand = new SqlCommand("INSERT INTO Boundaries (Longitude, Latitude, LGA) VALUES (@0, @1, @2)", conn);
                             insertCommand.Parameters.Add(new SqlParameter("0", c[0]));
                             insertCommand.Parameters.Add(new SqlParameter("1", c[1]));
                             insertCommand.Parameters.Add(new SqlParameter("2", lga));
                             insertCommand.ExecuteNonQuery();
-
                         }
-
                     }
-
                 }
             }
             return "done";
